@@ -40,8 +40,8 @@ app.get("/api/:date", (req, res) => {
 			unix: d.getDate(),
 		});
 	}
-	const dt = Date.parse(date);
-	if (isNaN(dt) && isNaN(Number(date))) return res.json({ error: "Invalid Date" });
+	let dt = isNaN(Number(date)) ? Date.parse(date) : Date.parse(Number(date));
+	if (isNaN(dt)) return res.json({ error: "Invalid Date" });
 	res.json({
 		unix: dt,
 		utc: new Date(date).toUTCString(),
