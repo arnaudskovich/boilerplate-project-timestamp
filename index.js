@@ -33,18 +33,19 @@ app.get("/api/", (req, res) => {
 
 app.get("/api/:date", (req, res) => {
 	const { date } = req.params;
-	if (!date) {
-		const d = new Date();
+	const nDate = Number(date);
+	if (!isNaN(nDate)) {
+		const d = new Date(nDate);
 		return res.json({
 			utc: d.toUTCString(),
-			unix: d.getDate(),
+			unix: nDate,
 		});
 	}
-	let dt = isNaN(Number(date)) ? Date.parse(date) : Date.parse(Number(date));
-	if (isNaN(dt)) return res.json({ error: "Invalid Date" });
-	res.json({
-		unix: dt,
-		utc: new Date(date).toUTCString(),
+	const d = Date.parse(date);
+	if (isNaN(d)) return res.json({ error: "Invalid Date" });
+	return res.json({
+		utc: new Date(d).toUTCString(),
+		unix: d,
 	});
 });
 
